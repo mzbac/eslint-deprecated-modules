@@ -3,7 +3,13 @@ const rule = require('./disallow-alert');
 
 const ruleTester = new RuleTester();
 ruleTester.run('no-alert', rule, {
-  valid: ['foo.alert()', 'balert()', 'alerts()', `var x = alert`],
+  valid: [
+    'foo.alert()',
+    'balert()',
+    'alerts()',
+    `var x = alert`,
+    {code: 'console.warn()', options: [{allowedMethods: ['warn']}]},
+  ],
   invalid: [
     {
       code: `alert()`,
