@@ -1,4 +1,4 @@
-const {RuleTester} = require('eslint');
+const { RuleTester } = require('eslint');
 const rule = require('./disallow-alert');
 
 const ruleTester = new RuleTester();
@@ -8,7 +8,7 @@ ruleTester.run('no-alert', rule, {
     'balert()',
     'alerts()',
     `var x = alert`,
-    {code: 'console.warn()', options: [{allowedMethods: ['warn']}]},
+    { code: 'console.warn()', options: [{ name: 'test', use: 'test1' }] },
   ],
   invalid: [
     {

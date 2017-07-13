@@ -1,39 +1,60 @@
+const makeImportObj = (importName) => {
+  if (typeof importName === 'string') {
+    return { name: importName };
+  }
+  if (typeof importName === 'object' && importName.name && importName.use) {
+    return importName;
+  }
+  throw new Error(`Unsupported type of argument ${JSON.stringify(importName)}`);
+};
+
 module.exports = {
   meta: {
     docs: {
-      description: 'Disallow use of alert',
+      description: 'deprecate some module',
       category: 'Best Practices',
       recommended: true,
     },
-    schema: [
-      {
-        type: 'object',
-        properties: {
-          allowedMethods: {
-            type: 'array',
-            items: {
-              enum: ['log', 'info', 'warn', 'error', 'dir'],
-            },
-            minItems: 1,
-            uniqueItems: true,
-          },
-        },
-      },
-    ],
   },
   create(context) {
-    const config = context.options[0] || {};
-    const allowedMethods = config.allowedMethods || [];
-    console.log(allowedMethods);
+    const imports = {};
+    context.options.map(makeImportObj).forEach((importObj) => {
+      imports[importObj.name] = importObj;
+    });
+
     return {
-      CallExpression(node) {
-        if (node.callee.name === 'alert') {
-          context.report({
-            node,
-            message: 'Using alert is not allowed',
-          })
+      ImportDeclaration(node) {
+        const imp = imports[node.source.value];
+        if (!imp) {
+          return;
         }
+        let errorMsg = `Module ${imp.name} is deprecated.`;
+        if (imp.use) {
+          errorMsg += ` Use ${imp.use} instead`;
+        }
+        context.report({ node, message: errorMsg });
       },
-    }
-  },
+      CallExpression(node) {
+        if (node.callee.name !== 'require' || !node.arguments.length) {
+          return;
+        }
+        const requireArg = node.arguments[0];
+        if (requireArg.type !== 'Literal') {
+          return;
+        }
+        const imp = imports[requireArg.value];
+
+        if (!imp) {
+          return;
+        }
+
+        let errorMsg = `Module ${imp.name} is deprecated.`;
+
+        if (imp.use) {
+          errorMsg += ` Use ${imp.use} instead`;
+        }
+        context.report({ node, message: errorMsg });
+      }
+    };
+  }
 };

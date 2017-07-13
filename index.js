@@ -1,3 +1,6 @@
-/**
- * Created by anchen on 13/07/17.
- */
+module.exports = {
+  extends: [
+    './rules/disallow-alert',
+  ].map(require.resolve),
+  rules: {}
+};
