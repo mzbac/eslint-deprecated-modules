@@ -1,6 +1,6 @@
 module.exports = {
   extends: [
-    './rules/disallow-alert',
+    './rules/deprecated-modules',
   ].map(require.resolve),
   rules: {}
 };

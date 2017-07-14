@@ -1,11 +1,7 @@
-const makeImportObj = (importName) => {
-  if (typeof importName === 'string') {
-    return { name: importName };
+const deprecateModules = {
+  'guid': {
+    alternativeModule: 'uuid'
   }
-  if (typeof importName === 'object' && importName.name && importName.use) {
-    return importName;
-  }
-  throw new Error(`Unsupported type of argument ${JSON.stringify(importName)}`);
 };
 
 module.exports = {
@@ -17,20 +13,16 @@ module.exports = {
     },
   },
   create(context) {
-    const imports = {};
-    context.options.map(makeImportObj).forEach((importObj) => {
-      imports[importObj.name] = importObj;
-    });
-
+    const imports = context.options[0] || deprecateModules;
     return {
       ImportDeclaration(node) {
         const imp = imports[node.source.value];
         if (!imp) {
           return;
         }
-        let errorMsg = `Module ${imp.name} is deprecated.`;
-        if (imp.use) {
-          errorMsg += ` Use ${imp.use} instead`;
+        let errorMsg = `Module ${node.source.value} is deprecated.`;
+        if (imp.alternativeModule) {
+          errorMsg += ` Use ${imp.alternativeModule} instead`;
         }
         context.report({ node, message: errorMsg });
       },
@@ -48,10 +40,10 @@ module.exports = {
           return;
         }
 
-        let errorMsg = `Module ${imp.name} is deprecated.`;
+        let errorMsg = `Module ${requireArg.value} is deprecated.`;
 
-        if (imp.use) {
-          errorMsg += ` Use ${imp.use} instead`;
+        if (imp.alternativeModule) {
+          errorMsg += ` Use ${imp.alternativeModule} instead`;
         }
         context.report({ node, message: errorMsg });
       }
