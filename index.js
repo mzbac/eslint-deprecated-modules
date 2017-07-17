@@ -1,6 +1,5 @@
 module.exports = {
-  extends: [
-    './rules/deprecated-modules',
-  ].map(require.resolve),
-  rules: {}
+  rules: {
+    'no-deprecate-modules':  require('./rules/deprecated-modules'),
+  }
 };
