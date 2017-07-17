@@ -1,6 +1,6 @@
 {
-  "name": "eslint-libs-rule",
-  "version": "1.0.0",
+  "name": "eslint-config-deprecatedModules",
+  "version": "0.0.1",
   "description": "eslint rule for npm packages",
   "main": "index.js",
   "scripts": {
