@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-deprecatedModules",
+  "name": "eslint-plugin-deprecatedModules",
   "version": "0.0.1",
   "description": "eslint rule for npm packages",
   "main": "index.js",
