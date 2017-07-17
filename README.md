@@ -17,7 +17,29 @@ in rules section add
 ```js
 
 "deprecatedModules/no-deprecate-modules":2
-asd
-e.g.
 
+```
+example config as below :
+```js
+
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "plugins": [
+    "deprecatedModules"
+  ],
+  "extends": "airbnb",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    "deprecatedModules/no-deprecate-modules":2
+  }
+}
 ```
