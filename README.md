@@ -18,6 +18,17 @@ in rules section add
 
 "deprecatedModules/no-deprecate-modules":2
 
+OR
+
+"deprecatedModules/no-deprecate-modules": [
+  2,
+  {
+    "react": {
+      "alternativeModule": "preact"
+    }
+  }
+]
+
 ```
 example config as below :
 ```js
